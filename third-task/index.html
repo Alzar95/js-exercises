@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Third task</title>
+</head>
+<body>
+<form>
+    <button type="submit">Submit</button>
+</form>
+<script>
+        let xhr = new XMLHttpRequest();
+
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                xhr.status === 200 ? console.log(xhr.responseText) :
+                    console.log(`Error code: ${xhr.status}`);
+            }
+        };
+
+        xhr.open('GET', '/data', true);
+        xhr.send();
+
+        xhr.open('POST', '/time', true);
+        xhr.send('data');
+</script>
+</body>
+</html>

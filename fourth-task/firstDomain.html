@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>First domain</title>
+    <style>
+        .form-get {
+            width: max-content;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #b5b5d0;
+            border-radius: 5px;
+        }
+
+        .form-set {
+            display: flex;
+            flex-direction: column;
+            width: max-content;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #b5b5d0;
+            border-radius: 5px;
+        }
+
+        .form-get-title, .form-set-title, .form-remove-title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .form-set-title {
+            margin-bottom: 5px;
+        }
+
+        .form-set-description {
+            margin-bottom: 5px;
+        }
+
+        .form-remove {
+            width: max-content;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #b5b5d0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+<iframe src="http://domain.two:3605/" width="100" height="100"></iframe>
+
+<div>
+    <form name="mainForm" id="form" onsubmit="return false">
+        <h3>Выбрать домен для работы</h3>
+        <label for="domainOne">Domain one</label><input name="control" id="domainOne" type="radio" value="one"/>
+        <label for="domainTwo">Domain two</label><input name="control" id="domainTwo" type="radio" value="two"/>
+        <div class="form-get">
+            <span class="form-get-title">Получит данные в консоль</span>
+            <button onclick="readDataToStorage()">Получить данные из localstorage</button>
+        </div>
+        <div class="form-set">
+            <span class="form-set-title">Добавить данные</span>
+            <label class="form-set-description">
+                <span>Key:</span>
+                <input name="keyStorage" type="text">
+            </label>
+            <label class="form-set-description">
+                <span>Value:</span>
+                <input name="valueStorage" type="text">
+            </label>
+            <button onclick="sendDataToStorage()">Добавить данные в localstorage</button>
+        </div>
+        <div class="form-remove">
+            <span class="form-remove-title">Удалить по ключу</span>
+            <label>
+                Key:
+                <input name="keyRemoveStorage" type="text">
+            </label>
+            <button onclick="removeDataToStorage()">Удалить данные по ключу из localstorage</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    let iframe = document.getElementsByTagName('iframe')[0];
+    let form = document.forms.namedItem('mainForm');
+    let currentLocalStorage = 'one';
+    let radios = form.elements['control'];
+
+    radios[0].checked = true;
+
+    radios.forEach(radio => {
+        radio.onclick = (event) => {
+            currentLocalStorage = event.target.value;
+        }
+    });
+
+    const readDataToStorage = () => {
+        if (currentLocalStorage === 'one') {
+            let keys = Object.keys(localStorage);
+            keys.forEach(item => {
+                console.log('Key: ' + item + ' | ' + 'Value: ' + localStorage.getItem(item));
+            });
+        } else if (currentLocalStorage === 'two') {
+            iframe.contentWindow.postMessage(JSON.stringify({
+                method: 'reading',
+            }), '*');
+        }
+    };
+
+    const sendDataToStorage = () => {
+        let dataFromInputKey = form.elements.namedItem('keyStorage').value;
+        let dataFromInputValue = form.elements.namedItem('valueStorage').value;
+
+        if (currentLocalStorage === 'one') {
+            localStorage.setItem(dataFromInputKey, dataFromInputValue);
+            console.log('written');
+        } else if (currentLocalStorage === 'two') {
+            iframe.contentWindow.postMessage(JSON.stringify({
+                method: 'written',
+                key: dataFromInputKey,
+                value: dataFromInputValue
+            }), '*');
+        }
+
+        form.elements.namedItem('keyStorage').value = '';
+        form.elements.namedItem('valueStorage').value = '';
+    };
+
+    const removeDataToStorage = () => {
+        let dataFromInputKey = form.elements.namedItem('keyRemoveStorage').value;
+
+        if (currentLocalStorage === 'one') {
+            localStorage.removeItem(dataFromInputKey);
+            console.log('removed');
+        } else if (currentLocalStorage === 'two') {
+            iframe.contentWindow.postMessage(JSON.stringify({
+                method: 'removed',
+                key: dataFromInputKey,
+            }), '*');
+        }
+
+        form.elements.namedItem('keyRemoveStorage').value = '';
+    };
+</script>
+</body>
+</html>

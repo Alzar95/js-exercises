@@ -1,0 +1,25 @@
+.header {
+    display: flex;
+    color: darkblue;
+    background-color: #b5b5d0;
+}
+
+.header-links {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    list-style-type: none;
+}
+
+.header-links a {
+    text-decoration: none;
+}
+
+.header-links-item {
+    cursor: pointer;
+    margin: 0 10px;
+}
+
+.header-links-item:hover {
+    color: gold;
+}

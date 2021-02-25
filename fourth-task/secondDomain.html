@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Second domain</title>
+</head>
+<body>
+<script>
+    window.onmessage = function(e) {
+        let payload = JSON.parse(e.data);
+
+        if (payload.method === 'reading') {
+            let keys = Object.keys(localStorage);
+            keys.forEach(item => {
+                console.log('Key: ' + item + ' | ' + 'Value: ' + localStorage.getItem(item));
+            });
+        } else if (payload.method === 'written') {
+            localStorage.setItem(payload.key, payload.value);
+            console.log('written');
+        } else if (payload.method === 'removed') {
+            localStorage.removeItem(payload.key);
+            console.log('removed');
+        }
+    };
+</script>
+</body>
+</html>

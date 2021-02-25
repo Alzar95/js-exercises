@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Second task</title>
+</head>
+<body>
+<form id="form">
+    <div>
+        <label for="radioSizeS">S</label><input name="size" id="radioSizeS" type="radio" value="S"/>
+        <label for="radioSizeM">M</label><input name="size" id="radioSizeM" type="radio" value="M"/>
+        <label for="radioSizeL">L</label><input name="size" id="radioSizeL" type="radio" value="L"/>
+    </div>
+    <div>
+        <label for="checkColor1">Color 1</label><input id="checkColor1" name="color" type="checkbox" value="1"/>
+        <label for="checkColor2">Color 2</label><input id="checkColor2" name="color" type="checkbox" value="2"/>
+        <label for="checkColor3">Color 3</label><input id="checkColor3" name="color" type="checkbox" value="3"/>
+        <label for="checkColor4">Color 4</label><input id="checkColor4" name="color" type="checkbox" value="4"/>
+        <label for="checkColor5">Color 5</label><input id="checkColor5" name="color" type="checkbox" value="5"/>
+    </div>
+    <div>
+        <label>
+            <select id="select" name="manufacturer" multiple>
+                <option id="manufacturer-aaa" value="aaa">aaa</option>
+                <option id="manufacturer-b&c" value="b&c">b&c</option>
+                <option id="manufacturer-ddd" value="ddd">ddd</option>
+                <option id="manufacturer-eee" value="eee">eee</option>
+            </select>
+        </label>
+    </div>
+    <div>
+        <label for="sale">распродажа</label><input id="sale" type="checkbox" value="1"/>
+    </div>
+</form>
+
+<script>
+    const queryString = window.location.search;
+    let urlParams = new URLSearchParams(queryString);
+
+    const sizeForRadio = urlParams.get('size');
+    const colorForCheck = urlParams.getAll('color');
+    const manufacturerForSelectMultiple = urlParams.getAll('manufacturer');
+
+    let radioButton = document.getElementById("radioSize" + sizeForRadio);
+    radioButton.checked = true;
+
+    colorForCheck.forEach(item => {
+        let checkButton = document.getElementById("checkColor" + item);
+        checkButton.checked = true;
+    });
+
+    manufacturerForSelectMultiple.forEach(item => {
+        const select = document.getElementById("manufacturer-" + item);
+        select.selected = true;
+    });
+
+    let form = document.querySelector('form');
+
+    form.onclick = (event) => {
+        let currentValue = event.target.value;
+
+        if (event.target.name === 'size') {
+            urlParams.set('size', currentValue);
+            history.replaceState(null, null, '?' + urlParams.toString());
+        } else if (event.target.name === 'color') {
+            if (event.target.checked) {
+                urlParams.append('color', currentValue);
+            } else {
+                let newColorForCheck = urlParams.getAll('color');
+                newColorForCheck.forEach((item, index) => {
+                    if (item === currentValue) {
+                        newColorForCheck.splice(index, 1);
+                    }
+                });
+
+                urlParams.delete('color');
+
+                if (newColorForCheck.length) {
+                    newColorForCheck.forEach(item => {
+                        urlParams.append('color', item);
+                    });
+                }
+            }
+
+            urlParams.sort();
+            history.replaceState(null, null, '?' + urlParams.toString());
+        } else if (document.getElementById('select')) {
+            let checked = document.querySelectorAll('#select :checked');
+            let selected = [...checked].map(option => option.value);
+
+            urlParams.delete('manufacturer');
+            console.log(selected);
+
+            if (selected.length) {
+                selected.forEach(item => {
+                    urlParams.append('manufacturer', item);
+                });
+            }
+
+            urlParams.sort();
+            history.replaceState(null, null, '?' + urlParams.toString());
+        }
+    };
+</script>
+</body>
+</html>

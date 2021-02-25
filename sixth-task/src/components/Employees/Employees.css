@@ -1,0 +1,67 @@
+.employees {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    justify-items: center;
+    padding: 15px;
+}
+
+.employees-title {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.employees-add {
+    display: flex;
+    margin: 15px 10px 10px 40px;
+}
+
+.employees-add-input {}
+
+.employees-add-btn {
+    width: max-content;
+    border: 3px solid gold;
+    /*border: none;*/
+    border-radius: 5px;
+    padding: 5px 15px;
+    margin-left: 15px;
+    color: white;
+    background-color: green;
+}
+
+.employees-btn-add {
+
+}
+
+.employees-btn-add:hover {
+    background-color: yellowgreen;
+}
+
+.employees-list {
+    list-style-type: none;
+}
+
+.employees-list-item {
+    display: flex;
+    margin-bottom: 5px;
+}
+
+.employees-list-item-text-name {
+    width: 6%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.employees-list-item-btn-remove {
+    border: none;
+    border-radius: 5px;
+    padding: 5px 15px;
+    margin: 0 10px;
+    color: white;
+    background-color: red;
+}
+
+.employees-list-item-btn-remove:hover {
+    background-color: mediumorchid;
+}

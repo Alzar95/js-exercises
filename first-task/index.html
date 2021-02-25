@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>First task</title>
+    <style>.red {color: red;}</style>
+</head>
+<body>
+<input type="text" name="name" id="name_input" value="Xxxx">
+<script>
+    var input = document.body.children[0];
+
+    let initialState = input.value;
+
+    input.oninput = function() {
+        if (initialState !== input.value) {
+            input.classList.add('red');
+        } else {
+            input.classList.remove(...input.classList);
+        }
+    };
+</script>
+</body>
+</html>
